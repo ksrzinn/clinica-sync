@@ -1,0 +1,15 @@
+services:
+  backend:
+    build: ./backend
+    container_name: clinica-sync-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app:/app/app   # hot-reload: edita local, container atualiza sozinho
+      - backend_data:/app/data   # onde vai morar o sqlite (cache + xlsx gerados)
+    env_file:
+      - .env
+    restart: unless-stopped
+
+volumes:
+  backend_data:
