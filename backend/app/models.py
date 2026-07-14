@@ -2,6 +2,9 @@ from datetime import date, time
 
 from pydantic import BaseModel, ConfigDict, Field
 
+import os
+import httpx
+from dotenv import load_dotenv
 
 class Procedimento(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
@@ -69,21 +72,34 @@ class PacienteListaResponse(BaseModel):
     total_paginas: int = Field(alias="totalPaginas")
     lista: list[Paciente]
 
+class TipoConvenio(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
 
+    id: int
+    nome: str
+    ativo: bool
+    particular: bool
+    beneficio: bool
 
-if __name__ == "__main__":
-    dados_pacientes = {
-        "pagina": 0,
-        "totalPaginas": 1,
-        "lista": [
-            {"id": 1, "nome": "Ana Silva"},
-            {"id": 2, "nome": "Bruno Costa"},
-            {"id": 3, "nome": "Carla Souza"},
-        ]
-    }
-    for paciente in dados_pacientes["lista"]:
-        print(f"Paciente: {paciente['nome']} (ID: {paciente['id']})")
-        lookup = {p['id']: p for p in dados_pacientes["lista"]}
+class TipoConvenioListaResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
 
+    pagina: int
+    total_paginas: int = Field(alias="totalPaginas")
+    lista: list[TipoConvenio]
 
-    print(lookup[3])
+class ExecutorAgenda(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    id: int
+    id_pessoa: int = Field(alias="idpessoa")
+    nome: str
+    ativo: bool
+    tipo_executor: str = Field(alias="tipoExecutor")
+
+class ExecutorAgendaListaResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    pagina: int
+    total_paginas: int = Field(alias="totalPaginas")
+    lista: list[ExecutorAgenda]
