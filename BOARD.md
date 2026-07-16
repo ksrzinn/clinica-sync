@@ -137,12 +137,12 @@
 **Story:** Como desenvolvedor, quero escrever a classe `ClinicaNasNuvensClient` do zero (auth, headers, rate limiter, paginação, os 4 métodos de listagem), para consolidar async/await + context manager + generator num artefato real e reutilizável.
 
 **Critérios de aceite:**
-- [ ] Classe com `__init__` configurando `httpx.AsyncClient` com `auth` e `headers`
-- [ ] Método privado `_get()` usando `async with self._limiter:`
-- [ ] `listar_tipo_convenio()` e `listar_executor_agenda()` (1 página, síncronos em espírito)
-- [ ] `listar_agenda_completa()` com paginação em loop
-- [ ] `iter_clientes()` como gerador assíncrono (streaming de página em página)
-- [ ] Testado batendo na API real pros 4 endpoints
+- [x] Classe com `__init__` configurando `httpx.AsyncClient` com `auth` e `headers`
+- [x] Método privado `_get()` usando `async with self._limiter:`
+- [x] `listar_tipo_convenio()` e `listar_executor_agenda()` (1 página, síncronos em espírito)
+- [x] `listar_agenda_completa()` com paginação em loop
+- [x] `iter_clientes()` como gerador assíncrono (streaming de página em página)
+- [x] Testado batendo na API real pros 4 endpoints
 
 **Dependências:** CARD-03, 04, 05, 07, 08 — esse é o card que consolida tudo dos fundamentos.
 

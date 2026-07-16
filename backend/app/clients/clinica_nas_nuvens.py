@@ -1,8 +1,10 @@
+import asyncio
+
 import httpx
 from aiolimiter import AsyncLimiter
 
 from app.config import settings
-from app.models import AgendaItem, AgendaListaResponse
+from app.models import AgendaItem, AgendaListaResponse, ExecutorAgenda, ExecutorAgendaListaResponse, PacienteListaResponse, TipoConvenio, TipoConvenioListaResponse
 
 
 class ClinicaNasNuvensClient:
@@ -53,6 +55,25 @@ class ClinicaNasNuvensClient:
             itens.extend(resp.lista)
 
         return itens
+
+    async def listar_tipo_convenio(self) -> TipoConvenioListaResponse:
+        data = await self._get("/tipo-convenio/lista", params={"pagina": 0})
+        return TipoConvenioListaResponse.model_validate(data)
+
+    async def listar_executor_agenda(self) -> ExecutorAgendaListaResponse:
+        data = await self._get("/executor-agenda/lista", params={"pagina": 0})
+        return ExecutorAgendaListaResponse.model_validate(data)
+
+    async def iter_clientes(self):
+        pagina = 0
+        primeira_data = await self._get("/paciente/lista", params={"pagina": pagina})
+        primeira = PacienteListaResponse.model_validate(primeira_data)
+        yield primeira.lista
+
+        for pagina in range(1, primeira.total_paginas):
+            data = await self._get("/paciente/lista", params={"pagina": pagina})
+            resp = PacienteListaResponse.model_validate(data)
+            yield resp.lista
 
     async def aclose(self) -> None:
         await self._client.aclose()
